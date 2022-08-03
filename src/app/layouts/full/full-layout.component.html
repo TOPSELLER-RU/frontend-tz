@@ -1,0 +1,51 @@
+<!-- *NAVBAR* starts -->
+<app-navbar (searchTextEmpty)="checkNavbarSearchTextEmpty($event)"></app-navbar>
+<!-- *NAVBAR* ends -->
+
+<div class="wrapper" [ngClass]="{'show-overlay': !isNavbarSearchTextEmpty}" (click)="onWrapperClick();" (window:resize)="onResize($event)">
+
+  <!-- *SIDE* Menu starts -->
+  <div
+    appSidebar
+    class="main-menu menu-fixed app-sidebar"
+    [ngClass]="{'menu-native-scroll': !perfectScrollbarEnable }"
+    (mouseenter)="sidebarMouseenter()"
+    (mouseleave)="sidebarMouseleave()"
+    data-active-color="white"
+    [attr.data-background-color]="config.layout.variant === 'Transparent' ? 'black': bgColor"
+    [attr.data-image]="bgImage"
+  >
+    <app-sidebar></app-sidebar>
+    <div
+      class="sidebar-background"
+      [ngStyle]="{'background-image': 'url(' + bgImage + ')'}"
+      *ngIf="config.layout.sidebar.backgroundImage"
+    ></div>
+  </div>
+  <!-- *SIDE* Menu ends -->
+
+  <div class="main-panel">
+    <div class="main-content">
+      <div class="content-overlay"></div>
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <!-- FOOTER -->
+    <app-footer></app-footer>
+
+    <!-- Scroll to top button -->
+    <button class="btn btn-light scroll-top" type="button" *ngIf="isScrollTopVisible" (click)="scrollToTop()"><i class="ft-arrow-up"></i></button>
+  </div>
+
+  <!-- *NOTIFICATION-SIDEBAR* starts -->
+  <app-notification-sidebar></app-notification-sidebar>
+  <!-- *NOTIFICATION-SIDEBAR* ends -->
+
+
+
+
+  <div class="sidenav-overlay" (click)="onOutsideClick($event);"
+    [ngClass]="{'d-none': displayOverlayMenu && hideSidebar && !overlayContent , 'd-block': displayOverlayMenu && !hideSidebar && overlayContent && innerWidth < 1200}"></div>
+  <div class="drag-target"></div>
+</div>

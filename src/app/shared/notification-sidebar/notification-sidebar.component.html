@@ -1,0 +1,55 @@
+<aside class="notification-sidebar d-none d-sm-none d-md-block" id="notification-sidebar" [ngClass]="{open: isOpen}">
+  <a class="notification-sidebar-close" (click)="onClose()">
+    <i class="ft-x font-medium-3 grey darken-1"></i>
+  </a>
+  <div class="side-nav notification-sidebar-content" [perfectScrollbar]>
+    <div class="row">
+      <div class="col-12 notification-tab-content">
+        <nav ngbNav #nav="ngbNav" class="nav-tabs">
+          <ng-container ngbNavItem class="nav-item">
+            <a ngbNavLink class="nav-link">Настройки</a>
+            <ng-template ngbNavContent>
+              <div class="row tab-pane" id="settings-tab" aria-labelledby="base-tab2">
+                <div class="col-12" id="settings">
+                  <h5 class="mt-2 mb-3">Основные настройки</h5>
+                  <ul class="list-unstyled mb-0 mx-2">
+                    <li class="mb-3">
+                      <div class="mb-1">
+                        <span class="text-bold-500">Notifications</span>
+                        <div class="float-end">
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" id="noti-s-switch-1" role="switch" type="checkbox">
+                            <label class="form-check-label" for="noti-s-switch-1"></label>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="font-small-3 m-0">Use switches when looking for yes or no answers.</p>
+                    </li>
+                    <li class="mb-3">
+                      <div class="mb-1"><span class="text-bold-500">Show recent activity</span>
+                        <div class="float-end">
+                          <div class="form-check">
+                            <input class="form-check-input" id="noti-s-checkbox-1" type="checkbox" checked="checked">
+                            <label class="form-check-label" for="noti-s-checkbox-1"></label>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="font-small-3 m-0">The "for" attribute is necessary to bind checkbox with the input.</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
+          <ng-container ngbNavItem class="nav-item">
+            <a ngbNavLink class="nav-link">Оформление</a>
+            <ng-template ngbNavContent>
+              <app-customizer></app-customizer>
+            </ng-template>
+          </ng-container>
+        </nav>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</aside>

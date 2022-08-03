@@ -1,0 +1,453 @@
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="content-header">Заказ покупателя</div>
+  </div>
+</div>
+
+<ng-template [ngIf]="orderForm">
+  <form [formGroup]="orderForm">
+
+    <div class="row" *ngIf="grantedView">
+      <div class="col-12">
+        <!-- Kick start -->
+        <div id="kick-start" class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="card-text">
+
+                <div class="my-4">
+                  <div class="row">
+                    <div class="col-1">
+                        <label for="name" class="form-label">№ </label>
+                    </div>
+                    <div class="col-11">
+                        <input
+                          [ngClass]="{'is-invalid': number?.invalid}"
+                          class="form-control"
+                          formControlName="number"
+                          placeholder="номер заказа"
+                          required
+                          type="text"
+                          id="name"
+                          style="padding: 0.2rem 0;font-size: 1.4rem;border-top:  none;border-left: none;border-right: none;border-radius: 0;"
+                        >
+                        <div
+                          *ngIf="number?.invalid && (number?.dirty || number?.touched)"
+                          class="help-block mt-0 ms-1 text-danger"
+                        >
+                          <span *ngIf="number?.errors?.['required']"> введите номер заказа</span>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-6">
+
+                    <div class="mb-3 row">
+                      <label for="orderAt" class="col-sm-3 col-form-label">Дата:</label>
+                      <div class="col-sm-8">
+                        <div class="input-group">
+                          <input
+                          type="text"
+                          ngbDatepicker
+                          formControlName="orderAt"
+                          id="orderAt"
+                          #dOrder="ngbDatepicker"
+                          class="form-control"
+                          [ngClass]="{'is-invalid': orderAt?.invalid}"
+                          />
+                          <button class="input-group-text ft-calendar" type="button" (click)="dOrder.toggle()"></button>
+                        </div>
+                        <div class="help-block mt-o ms-1 text-danger"
+                        *ngIf="orderAt?.invalid && (orderAt?.dirty || orderAt?.touched)">
+                          <span *ngIf="orderAt?.errors?.['required']">укажите дату</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label for="address" class="col-sm-3 col-form-label">Адрес: </label>
+                      <div class="col-sm-8">
+                        <div class="input-group">
+                          <input
+                          class="form-control"
+                          type="text"
+                          formControlName="address"
+                          id="address"
+                          [ngClass]="{'is-invalid' : orderAt?.invalid}"
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label for="plannedAt" class="col-sm-3 col-form-label">Планируемая дата доставки: </label>
+                      <div class="col-sm-8">
+                        <div class="input-group">
+                          <input type="text"
+                          class="form-control"
+                          formControlName="plannedAt"
+                          id="plannedAt"
+                          ngbDatepicker
+                          #dPlanned="ngbDatepicker">
+                          <button class="input-group-text ft-calendar" type="button" (click)="dPlanned.toggle()"></button>
+                        </div>
+                        <div>
+                          <span *ngIf="plannedAt?.errors?.['required']">введите дату</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="organization">Организация:</label>
+                      <div class="col-sm-8">
+                        <select
+                        [ngClass]="{'is-invalid': organization?.invalid}"
+                        class="form-select"
+                        formControlName="organization"
+                        id="organization"
+                      >
+                        <option value=""></option>
+                        <option value="{{organization.id}}" *ngFor="let organization of organizations">{{organization.name}}</option>
+                      </select>
+
+                      <div
+                        *ngIf="organization?.invalid && (organization?.dirty || organization?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="organization?.errors?.['required']"> Укажите организацию</span>
+                      </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="counterparty">Контрагент:</label>
+                      <div class="col-sm-8">
+                        <select
+                          [ngClass]="{'is-invalid': counterparty?.invalid}"
+                          class="form-select"
+                          formControlName="counterparty"
+                          id="counterparty"
+                        >
+                          <option value=""></option>
+                          <option value="{{counterparty.id}}" *ngFor="let counterparty of counterparties">{{counterparty.name}}</option>
+                        </select>
+
+                        <div
+                          *ngIf="counterparty?.invalid && (counterparty?.dirty || counterparty?.touched)"
+                          class="help-block mt-0 ms-1 text-danger"
+                        >
+                          <span *ngIf="counterparty?.errors?.['required']"> Укажите контрагента</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="warehouse">Склад:</label>
+                      <div class="col-sm-8">
+                        <select
+                          [ngClass]="{'is-invalid': warehouse?.invalid}"
+                          class="form-select"
+                          formControlName="warehouse"
+                          id="warehouse"
+                        >
+                          <option value=""></option>
+                          <option value="{{warehouse.id}}" *ngFor="let warehouse of warehouses">{{warehouse.name}}</option>
+                        </select>
+
+                        <div
+                          *ngIf="warehouse?.invalid && (warehouse?.dirty || warehouse?.touched)"
+                          class="help-block mt-0 ms-1 text-danger"
+                        >
+                          <span *ngIf="warehouse?.errors?.['required']"> Укажите склад</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="project">Проект:</label>
+                      <div class="col-sm-8">
+                        <select
+                          [ngClass]="{'is-invalid': project?.invalid}"
+                          class="form-select"
+                          formControlName="project"
+                          id="project"
+                        >
+                          <option value=""></option>
+                          <option value="{{project.id}}" *ngFor="let project of projects">{{project.name}}</option>
+                        </select>
+
+                        <div
+                          *ngIf="project?.invalid && (project?.dirty || project?.touched)"
+                          class="help-block mt-0 ms-1 text-danger"
+                        >
+                          <span *ngIf="project?.errors?.['required']"> Укажите проект</span>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+
+                  <div class="col-6">
+
+
+                    <div class="form-check mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="draft"
+                        type="checkbox"
+                        id="draft"
+                        value=""
+                      >
+                      <label class="form-label" for="draft">черновик </label>
+                    </div>
+
+
+                    <div class="form-check mb-3">
+                      <input
+                        class="form-check-input"
+                        formControlName="reserved"
+                        type="checkbox"
+                        id="reserved"
+                        value=""
+                      >
+                      <label class="form-label" for="reserved">зарезервирован </label>
+                    </div>
+                  </div>
+
+                </div>
+
+                <h5 class="mb-3 mt-4" >Товары: </h5>
+
+                <table class="table table-hover" formArrayName="orderProducts">
+                  <thead>
+                    <tr>
+                      <th>№ п.п.</th>
+                      <th>Товар</th>
+                      <th>Артикул</th>
+                      <th>Цена</th>
+                      <th>Колл-во</th>
+                      <th>Отгруженно</th>
+                      <th>Возврат</th>
+                      <th>НДС</th>
+                      <th>Сумма</th>
+                      <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr *ngFor="let item of orderProducts.controls; let i = index" [formGroupName]="i">
+                        <td class="text-end">{{ i+1 }}</td>
+                        <td>{{item.productName}}</td>
+                        <td>{{item.productSku}}</td>
+                        <td>
+                          <input type="text" formControlName="price"
+                          class="form-control text-end bg-white"
+                          [ngClass]="item.get('price')?.invalid ? 'is-invalid' : ''">
+                        </td>
+                        <td>
+                          <input formControlName="quantity"
+                          class="form-control text-end bg-white"
+                          type="text"
+                          [ngClass]="item.get('quantity')?.invalid ? 'is-invalid' : ''">
+                        </td>
+                        <td>
+                          {{item.shipOrder}}
+                        </td>
+                        <td>
+                           {{item.returnOrder}}
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            formControlName="vat"
+                            class="form-control text-end bg-white"
+                            [ngClass]="item.get('vat')?.invalid ? 'is-invalid' : ''"
+                          >
+                        </td>
+                        <td>{{item.amount}}</td>
+                        <td><a title="удалить из набора" (click)="removeFromPurchase(i)"><i class="ft-trash-2"></i></a></td>
+                      </tr>
+                    </tbody>
+                </table>
+                <div class="text-end text-bold-600 mb-3 pe-2">Итого: {{total}}</div>
+
+                <div class="mb-3 row">
+                  <label for="productSearch" class="col-xs-3 col-sm-auto col-form-label">Добавить товар в заказ:</label>
+                  <div class="col">
+                    <input
+                      id="productSearch"
+                      type="text"
+                      class="form-control"
+                      [class.is-invalid]="searchProductFailed"
+                      [resultFormatter]="modelProductFormat"
+                      [inputFormatter]="modelProductFormat"
+                      [ngbTypeahead]="searchProduct"
+                      (selectItem)="selectSearchProduct($event)"
+                      [ngModelOptions]="{standalone: true}"
+                      [editable]="false"
+                      placeholder="начните вводить название"
+                      [(ngModel)]="searchProductText"
+                    />
+                    <small *ngIf="searchingProduct" class="form-text text-muted">ищем...</small>
+                    <div class="invalid-feedback" *ngIf="searchProductFailed">Товаров не найдено</div>
+                  </div>
+                  <div class="col-2">
+                    <button (click)="addProductToPurchase()" class="btn btn-primary">Добавить</button>
+                  </div>
+                </div>
+
+
+                <div class="mb-3 mt-5 row">
+                  <p>Добавить комментарий:</p>
+                  <textarea class="form-control mb-1" [ngModelOptions]="{standalone: true}" [(ngModel)]="newCommentText"></textarea>
+                  <div class="text-end"><button class="btn btn-small btn-light" (click)="addComment()">Добавить комментарий</button></div>
+                </div>
+
+                <div class="mb-3">
+                  <h5>История заказа</h5>
+                      <div class="card mb-3" *ngFor="let log of logsCopy; let i = index">
+                        <div class="card-header">
+                          <span class="text-muted me-2">#{{i+1}}</span>
+                          <ng-container *ngIf="log.createdBy">
+                            <span class="fw-bold me-2">{{ log.createdBy.firstName }} {{ log.createdBy.lastName }}</span>
+                          </ng-container>
+                          <span>Дата: {{ getTime(log.createdAt) }}</span>
+                          <span *ngIf="log.modifiedAt != log.createdAt">Изменён: {{ getTime(log.modifiedAt) }}</span>
+                        </div>
+                        <div class="card-body">
+                          <ng-container *ngIf="log.type === 'comment'">
+                            <p class="card-text mb-1" [ngClass]="selectedComment === i ? 'd-none' : ''">
+                              {{ log.data.text }}
+                            </p>
+                            <div [ngClass]="selectedComment === i ? '' : 'd-none'">
+                              <textarea class="form-control mb-1"
+                              [ngModelOptions]="{standalone: true}" [(ngModel)]="editCommentText"></textarea>
+                              <div class="text-end">
+                                <button class="btn btn-secondary mt-1" (click)="selectedComment = -1; editCommentText='' ">Отменить</button>
+                                <button class="btn btn-primary mt-1 " (click)="editComment(log)" >Изменить</button>
+                              </div>
+                            </div>
+                            <ng-container *ngIf="userId === log.createdBy?.id">
+                              <div class="text-end">
+                                <button class="btn btn-secondary mt-1" [ngClass]="selectedComment === i ? 'd-none' : '' " (click)="selectComment(log, i)" >Редактировать</button>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                          <ng-container *ngIf="log.type === 'create'">
+                            <h6 class="card-title">Заказ создан</h6>
+                            <p class="card-text">
+                              {{ log.data.text }}
+                            </p>
+                          </ng-container>
+                          <ng-container *ngIf="log.type === 'edit'">
+                            <h6 class="card-title">Заказ отредактирован</h6>
+                            <p class="card-text">
+                              {{ log.data.text }}
+                            </p>
+                          </ng-container>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="mb-1 mt-5 text-end">
+                    <button type="button" class="btn btn-secondary" (click)="toList()">Закрыть</button>
+                    <button type="button" class="btn btn-primary ms-3" *ngIf="grantedEdit" (click)="save()" [disabled]="orderForm.invalid || formSubmitted">Сохранить</button>
+                  </div>
+                  <div class="mb-3" *ngIf="order?.id">
+                    <a class="text-danger" (click)="delete()" *ngIf="grantedDelete">Удалить заказ</a>
+                  </div>
+
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+  </form>
+</ng-template>
+
+
+<ng-template #shipmentModal let-shipmentModal>
+  <div class="modal-header" >
+    <h4 class="modal-title" id="edit-modal-title">
+      {{ viewShip ? 'Отгрузка  заказа' : 'Возврат товара'}}
+    </h4>
+  </div>
+  <div
+    class="modal-body"
+    *ngIf="shipmentForm"
+  >
+    <form [formGroup]="shipmentForm">
+      <table class="table table-hover" formArrayName="shipmentProducts">
+        <thead>
+        <tr>
+          <th>№ п.п.</th>
+          <th>Товар</th>
+          <th>Артикул</th>
+          <th>Код</th>
+          <th *ngIf="viewShip">{{ viewShip ? 'Отгрузить' : 'Вернуть' }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of shipmentProducts.controls; let i=index;" [formGroupName]="i">
+          <td class="text-end">{{i+1}}</td>
+          <td>{{item.productName}}</td>
+          <td>{{item.productSku}}</td>
+          <td>{{item.productCode}}</td>
+          <td>
+            <input type="text"
+                   class="form-control text-end bg-white"
+                   formControlName="count"
+                   [ngClass]="item.get('count')?.invalid ? 'is-invalid' : ''"
+            >
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-secondary"
+      type="button"
+      (click)="viewShip = false; viewReturn = false; shipmentModal.dismiss()"
+    >
+      Отмена
+    </button>
+    <button
+      [ngClass]="viewShip  ? '' : 'd-none'"
+      class="btn btn-primary w-70"
+      (click)="shipOrder()"
+    >Отгрузить</button>
+    <button
+      [ngClass]="viewReturn  ? '' : 'd-none'"
+      class="btn btn-primary w-70"
+      (click)="shipOrder(true)"
+    >Вернуть</button>
+  </div>
+</ng-template>
+
+
+<ng-template #confirmModal let-confirmModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Удаление заказа</h4>
+  </div>
+  <div class="modal-body">
+    <p>Удалить заказ <span class="text-bold-700">"{{ order?.number }}"</span> ?</p>
+    <p>Заказ удалится только если нигде не используется
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="confirmModal.dismiss()">Отмена</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete()">Удалить</button>
+  </div>
+</ng-template>

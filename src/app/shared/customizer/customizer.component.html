@@ -1,0 +1,187 @@
+<div class="row tab-pane customizer px-2 pb-3" id="customizer-tab" aria-labelledby="base-tab3" #customizer>
+    <!-- Layout Options Starts-->
+    <div class="ct-layout">
+      <h6 class="mb-3 d-flex align-items-center"><i class="ft-layout font-medium-2 me-2"></i><span>Тема оформления</span>
+      </h6>
+      <div class="layout-switch">
+        <div class="form-check form-check-inline light-layout me-3">
+          <input class="form-check-input" id="ll-switch" type="radio" name="layout-switch" [checked]="config.layout.variant === 'Light'"
+            (click)="customizerService.switchLayout('light', isBgImageDisplay)">
+          <label class="form-check-label" for="ll-switch">Светлая</label>
+        </div>
+        <div class="form-check form-check-inline dark-layout me-3">
+          <input class="form-check-input" id="dl-switch" type="radio" name="layout-switch" [checked]="config.layout.variant === 'Dark'"
+            (click)="customizerService.switchLayout('dark', isBgImageDisplay)">
+          <label class="form-check-label" for="dl-switch">Тёмная</label>
+        </div>
+        <div class="form-check form-check-inline transparent-layout">
+          <input class="form-check-input" id="tl-switch" type="radio" name="layout-switch" [checked]="config.layout.variant === 'Transparent'"
+            (click)="customizerService.switchLayout('transparent', isBgImageDisplay)">
+          <label class="form-check-label" for="tl-switch">Прозрачная</label>
+        </div>
+      </div>
+      <!-- Layout Options Ends-->
+    </div>
+    <!-- Sidebar Options Starts-->
+    <!-- Navbar Types-->
+    <div class="ct-navbar-type">
+      <hr>
+      <h6 class="mb-3 d-flex align-items-center"><i class="ft-more-horizontal font-medium-2 me-2"></i><span>Верхняя панель</span></h6>
+      <div class="mb-1">
+        Закрепить на экране
+        <div class="float-end">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              id="navbar-switch"
+              role="switch"
+              type="checkbox"
+              [checked]="config.layout.navbar.type === 'Fixed'"
+              (click)="customizerService.toggleNavbarType(config.layout.navbar.type === 'Fixed' ? 'Static' : 'Fixed')"
+            >
+            <label class="form-check-label" for="navbar-switch"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sidebar Options Starts-->
+    <div class="ct-bg-color">
+      <hr>
+      <h6 class="sb-options d-flex align-items-center mb-3"><i class="ft-droplet font-medium-2 mr-2"></i><span>Цвет
+        боковой панели</span></h6>
+      <div class="cz-bg-color sb-color-options">
+        <div class="row mb-3">
+          <div class="col px-2" *ngFor="let color of customizerService.lightDarkLayoutGradientBGColors">
+            <span class="{{color.class}} d-block rounded" style="width:30px; height:30px;"
+              [attr.data-bg-color]="color.code" [ngClass]="{'selected': color.active}"
+              (click)="customizerService.changeSidebarBGColor(color)">
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col px-2" *ngFor="let color of customizerService.lightDarkLayoutSolidBGColors">
+            <span class="{{color.class}} d-block rounded" style="width:30px; height:30px;"
+              [attr.data-bg-color]="color.code" [ngClass]="{'selected': color.active}"
+              (click)="customizerService.changeSidebarBGColor(color)">
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- Sidebar Options Ends-->
+      <!-- Transparent BG Image Ends-->
+      <div class="tl-bg-img">
+        <h6 class="d-flex align-items-center mb-3"><i class="ft-star font-medium-2 me-2"></i><span>Фон с тенями</span></h6>
+        <div class="cz-tl-bg-image row">
+          <div class="col-sm-3" *ngFor="let color of customizerService.transparentLayoutBGColorsWithShades">
+            <div class="rounded {{color.class}} ct-glass-bg" [attr.data-bg-image]="color.class"
+              [ngClass]="{'selected': color.active}" (click)="customizerService.changeSidebarTransparentBGColor(color)">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Transparent BG Image Ends-->
+    </div>
+    <!-- Sidebar BG Image Starts-->
+    <div class="ct-bg-image">
+      <hr>
+      <h6 class="sb-bg-img d-flex align-items-center mb-3"><i class="ft-sidebar font-medium-2 me-2"></i><span>Изображение
+        боковой панели</span></h6>
+      <div class="mb-1">
+        Показывать
+        <div class="float-end">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              id="sidebar-bg-img"
+              role="switch"
+              type="checkbox"
+              [checked]="isBgImageDisplay"
+              (change)="bgImageDisplay($event)"
+            >
+            <label class="form-check-label" for="sidebar-bg-img"></label>
+          </div>
+        </div>
+      </div>
+      <div class="cz-bg-image row mt-3 sb-bg-img" *ngIf="isBgImageDisplay">
+        <div class="col-2 px-2" *ngFor="let img of customizerService.lightDarkLayoutBGImages">
+          <img class="rounded" alt="sidebar bg image" [src]="img.src" width="90" [ngClass]="{'selected': img.active}"
+            (click)="customizerService.changeSidebarBgImage(img)" />
+        </div>
+      </div>
+      <!-- Transparent Layout Bg color Options-->
+      <div class="tl-color-option">
+        <h6 class="tl-color-options d-flex align-items-center mb-3"><i
+            class="ft-droplet font-medium-2 mr-2"></i><span>Цвет фона</span></h6>
+        <div class="cz-tl-bg-color">
+          <div class="row">
+            <div class="col" *ngFor="let color of customizerService.transparentLayoutBGColors">
+              <span class="{{color.class}} d-block rounded  ct-color-bg" style="width:30px; height:30px;"
+                [attr.data-bg-color]="color.class" [ngClass]="{'selected': color.active}"
+                (click)="customizerService.changeSidebarTransparentBGColor(color)">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Transparent Layout Bg color Ends-->
+    </div>
+
+    <div class="ct-compact-toggler">
+      <hr>
+      <h6 class="sb-bg-img d-flex align-items-center mb-3"><i class="ft-menu font-medium-2 me-2"></i><span>Меню</span></h6>
+      <div class="mb-1">
+        Компактный вид
+        <div class="float-end">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              id="cz-compact-menu"
+              role="switch"
+              type="checkbox"
+              [checked]="config.layout.sidebar.collapsed"
+              (change)="customizerService.toggleCompactMenu($event)"
+            >
+            <label class="form-check-label" for="cz-compact-menu"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Width Starts-->
+    <div class="ct-sidebar-size" *ngIf="!config.layout.sidebar.collapsed">
+      <hr>
+      <p>Ширина боковой панели</p>
+      <div class="cz-sidebar-width btn-group" id="cz-sidebar-width" role="group">
+        <input
+          type="checkbox"
+          class="btn-check"
+          id="cz-btn-radio-1"
+          autocomplete="off"
+          [checked]="{'active': size === 'sidebar-sm'}"
+          (change)="changeSidebarWidth('sidebar-sm')"
+        >
+        <label class="btn btn-outline-primary" for="cz-btn-radio-1">Узкая</label>
+
+        <input
+          type="checkbox"
+          class="btn-check"
+          id="cz-btn-radio-2"
+          autocomplete="off"
+          [checked]="{'active': size === 'sidebar-md'}"
+          (change)="changeSidebarWidth('sidebar-md')"
+        >
+        <label class="btn btn-outline-primary" for="cz-btn-radio-2">Средняя</label>
+
+        <input
+          type="checkbox"
+          class="btn-check"
+          id="cz-btn-radio-3"
+          autocomplete="off"
+          [checked]="{'active': size === 'sidebar-lg'}"
+          (change)="changeSidebarWidth('sidebar-lg')"
+        >
+        <label class="btn btn-outline-primary" for="cz-btn-radio-3">Широкая</label>
+      </div>
+    </div>
+    <!-- Sidebar Width Ends-->
+</div>

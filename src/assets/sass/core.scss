@@ -1,0 +1,47 @@
+//@import "core/variables/variables";
+@import "core/variables/app-variables";
+
+@import "core/mixins/shadows";
+//@import "core/mixins/typography";
+@import "core/mixins/utilities";
+
+//@import "~bootstrap/scss/functions";
+//@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/bootstrap";
+
+//@import "~bootstrap/scss/mixins";
+
+@import "bootstrap-extended/reboot";
+//@import "bootstrap-extended/grid";
+//@import "bootstrap-extended/badge";
+//@import "bootstrap-extended/card";
+//@import "bootstrap-extended/forms";
+//@import "bootstrap-extended/navbar";
+//@import "bootstrap-extended/type";
+
+
+//@import "components/misc";
+//@import "components/responsive";
+
+
+//@import "core/colors/palette";
+//@import "core/mixins/buttons";
+//@import "core/layouts/content";
+@import "core/layouts/sidebar-content";
+
+@import "components/components";
+@import "components/customizer";
+@import "components/ex-component-avatar";
+@import "components/helper";
+@import "components/misc";
+@import "components/notification-sidebar";
+@import "components/responsive";
+@import "components/utilities";
+
+//@import "core/layout-dark";
+
+@import "~perfect-scrollbar/css/perfect-scrollbar.css";
+@import "~ngx-spinner/animations/ball-fussion.css";
+
+
+

@@ -1,0 +1,828 @@
+<div class="row">
+  <div class="col-12">
+    <div class="content-header">{{ product?.id ? 'Редактирование' : 'Добавление'}} товара</div>
+  </div>
+</div>
+
+<form [formGroup]="productForm" *ngIf="grantedView && productForm">
+  <div class="row">
+    <div class="col-12">
+      <!-- Kick start -->
+      <div id="kick-start" class="card">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="card-text">
+
+              <div class="my-4">
+                <label class="form-label visually-hidden" for="name"></label>
+                <input
+                  [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched)}"
+                  class="form-control"
+                  formControlName="name"
+                  placeholder="наименование"
+                  required
+                  type="text"
+                  id="name"
+                  style="padding: 0.2rem 0;font-size: 1.4rem;border-top:  none;border-left: none;border-right: none;border-radius: 0;"
+                >
+                <div
+                  *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="name?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+              <ng-template #editGroup let-editGroup>
+                <div class="modal-header">
+                  <h4 class="modal-title">Выберете группу товаров</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <app-product-tree [recursiveList]="productGroups" [isEditGroup]="isEditGroup" ></app-product-tree>
+                  </div>
+                </div>
+              </ng-template>
+
+              <div class="row">
+                <div class="col-6">
+
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      formControlName="isEnabled"
+                      type="checkbox"
+                      id="isEnabled"
+                      value=""
+                    >
+                    <label class="form-label" for="isEnabled">включен</label>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label">Группа товаров:</label>
+                    <div class="col-sm-7">
+                      <button
+                        class="btn text-start w-100 btn-light"
+                        [ngClass]="productGroup?.name ? '' : 'btn-danger'"
+                        (click)="groupModal()"
+                      >{{ productGroup?.name }}</button>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="sku">Артикул:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': sku?.invalid && (sku?.dirty || sku?.touched)}"
+                        class="form-control"
+                        formControlName="sku"
+                        placeholder=""
+                        type="text"
+                        id="sku"
+                      >
+                      <div
+                        *ngIf="sku?.invalid && (sku?.dirty || sku?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="sku?.errors?.['required']"> введите артикул</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="code">Код:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': code?.invalid && (code?.dirty || code?.touched)}"
+                        class="form-control"
+                        formControlName="code"
+                        placeholder=""
+                        type="text"
+                        id="code"
+                      >
+                      <div
+                        *ngIf="code?.invalid && (code?.dirty || code?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="code?.errors?.['required']"> введите код</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="brand">Бренд:</label>
+                    <div class="col-sm-7">
+                      <input type="text"
+                      class="form-control"
+                      placeholder="Введите бренд"
+                      id="brand"
+                      [class.is-invalid]="searchBrandFailed"
+                      [(ngModel)]="searchBrandText"
+                      [ngModelOptions]="{standalone: true}"
+                      [resultFormatter]="modelBrandFormat"
+                      [inputFormatter]="modelBrandFormat"
+                      (selectItem)="selectBrand($event)"
+                      [ngbTypeahead]="searchBrand"
+                      [editable]="true"
+                      (keydown)="enterBrand()"
+                      >
+
+                      <small *ngIf="searchingBrand" class="form-text text-muted">ищем...</small>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="vat">НДС:</label>
+                    <div class="col-sm-7">
+                      <select
+                        [ngClass]="{'is-invalid': vat?.invalid && (vat?.dirty || vat?.touched)}"
+                        class="form-control"
+                        formControlName="vat"
+                        id="vat"
+                      >
+                        <option value="">Без НДС</option>
+                        <option value="0">0%</option>
+                        <option value="18">18%</option>
+                        <option value="20">20%</option>
+                      </select>
+                      <div
+                        *ngIf="vat?.invalid && (vat?.dirty || vat?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="vat?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="weight">Вес:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': weight?.invalid && (weight?.dirty || weight?.touched)}"
+                        class="form-control"
+                        formControlName="weight"
+                        placeholder=""
+                        type="text"
+                        id="weight"
+                      >
+                      <div
+                        *ngIf="weight?.invalid && (weight?.dirty || weight?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="weight?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="volume">Объём:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': volume?.invalid && (volume?.dirty || volume?.touched)}"
+                        class="form-control"
+                        formControlName="volume"
+                        placeholder=""
+                        type="text"
+                        id="volume"
+                      >
+                      <div
+                        *ngIf="volume?.invalid && (volume?.dirty || volume?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="volume?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="length">Длина:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': length?.invalid && (length?.dirty || length?.touched)}"
+                        class="form-control"
+                        formControlName="length"
+                        placeholder=""
+                        type="text"
+                        id="length"
+                      >
+                      <div
+                        *ngIf="length?.invalid && (length?.dirty || length?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="length?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="width">Ширина:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': width?.invalid && (width?.dirty || width?.touched)}"
+                        class="form-control"
+                        formControlName="width"
+                        placeholder=""
+                        type="text"
+                        id="width"
+                      >
+                      <div
+                        *ngIf="width?.invalid && (width?.dirty || width?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="width?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="height">Высота:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': height?.invalid && (height?.dirty || height?.touched)}"
+                        class="form-control"
+                        formControlName="height"
+                        placeholder=""
+                        type="text"
+                        id="height"
+                      >
+                      <div
+                        *ngIf="height?.invalid && (height?.dirty || height?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="height?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label" for="color">Цвет:</label>
+                    <div class="col-sm-7">
+                      <input
+                        [ngClass]="{'is-invalid': color?.invalid && (color?.dirty || color?.touched)}"
+                        class="form-control"
+                        formControlName="color"
+                        placeholder=""
+                        type="text"
+                        id="color"
+                      >
+                      <div
+                        *ngIf="height?.invalid && (color?.dirty || color?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="color?.errors?.['required']"> введите цвет</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+
+
+                <div class="col-6">
+                  <h5>Цены:</h5>
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label" for="price">Цена продажи:</label>
+                    <div class="col-sm-5">
+                      <input
+                        [ngClass]="{'is-invalid': price?.invalid && (price?.dirty || price?.touched)}"
+                        class="form-control text-end"
+                        formControlName="price"
+                        placeholder=""
+                        type="text"
+                        id="price"
+                      >
+                      <div
+                        *ngIf="price?.invalid && (price?.dirty || price?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="price?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label" for="priceSale">Цена после скидки:</label>
+                    <div class="col-sm-5">
+                      <input
+                        [ngClass]="{'is-invalid': priceSale?.invalid && (priceSale?.dirty || priceSale?.touched)}"
+                        class="form-control text-end"
+                        formControlName="priceSale"
+                        placeholder=""
+                        type="text"
+                        id="priceSale"
+                      >
+                      <div
+                        *ngIf="priceSale?.invalid && (priceSale?.dirty || priceSale?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="priceSale?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label" for="priceRrp">Рекомендуемая розничная цена:</label>
+                    <div class="col-sm-5">
+                      <input
+                        [ngClass]="{'is-invalid': priceRrp?.invalid && (priceRrp?.dirty || priceRrp?.touched)}"
+                        class="form-control text-end"
+                        formControlName="priceRrp"
+                        placeholder=""
+                        type="text"
+                        id="priceRrp"
+                      >
+                      <div
+                        *ngIf="priceRrp?.invalid && (priceRrp?.dirty || priceRrp?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="priceRrp?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label" for="priceMin">Минимальная цена:</label>
+                    <div class="col-sm-5">
+                      <input
+                        [ngClass]="{'is-invalid': priceMin?.invalid && (priceMin?.dirty || priceMin?.touched)}"
+                        class="form-control text-end"
+                        formControlName="priceMin"
+                        placeholder=""
+                        type="text"
+                        id="priceMin"
+                      >
+                      <div
+                        *ngIf="priceMin?.invalid && (priceMin?.dirty || priceMin?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="priceMin?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label" for="pricePurchase">Закупочная цена:</label>
+                    <div class="col-sm-5">
+                      <input
+                        [ngClass]="{'is-invalid': pricePurchase?.invalid && (pricePurchase?.dirty || pricePurchase?.touched)}"
+                        class="form-control text-end"
+                        formControlName="pricePurchase"
+                        placeholder=""
+                        type="text"
+                        id="pricePurchase"
+                      >
+                      <div
+                        *ngIf="pricePurchase?.invalid && (pricePurchase?.dirty || pricePurchase?.touched)"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="pricePurchase?.errors?.['required']"> введите название</span>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="product && product.customFields">
+                    <ng-container formArrayName="customPrices">
+                      <div class="mb-3 row" *ngFor="let field of customPrices.controls; let i=index" [formGroupName]="i">
+                        <div class="col-sm-5">
+                          <input
+                            formControlName="priceName"
+                            class="form-control"
+                            [class.border-danger]="field.get('name')?.invalid"
+                            placeholder=""
+                            type="text"
+                            id="customFiled-{{i}}-name"
+                          >
+                        </div>
+                        <div class="col-sm-5">
+                          <input
+                            formControlName="priceValue"
+                            class="form-control text-end"
+                            [class.border-danger]="field.get('value')?.invalid"
+                            placeholder=""
+                            type="text"
+                            id="customFiled-{{i}}-value"
+                          >
+                        </div>
+                        <div class="col-sm-1">
+                          <a title="удалить цену" (click)="removeCustomPrice(i)" *ngIf="grantedEdit"><i class="ft-trash-2"></i></a>
+                        </div>
+
+                      </div>
+
+                      <button (click)="addCustomPrice()" class="btn btn-sm btn-light" *ngIf="grantedEdit">+ добавить цену</button>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <ng-container *ngIf="product && product.customFields">
+                    <ng-container formArrayName="customFields">
+                      <div class="mb-3 row" *ngFor="let field of customFields.controls; let i=index" [formGroupName]="i">
+                        <div class="col-sm-3">
+                          <input
+                            formControlName="name"
+                            class="form-control"
+                            [class.border-danger]="field.get('name')?.invalid"
+                            placeholder=""
+                            type="text"
+                            id="customFiled-{{i}}-name"
+                          >
+                        </div>
+
+                        <div class="col-sm-2 me-0 pe-0">
+                          <select
+                            class="form-control"
+                            [class.border-danger]="field.get('type')?.invalid"
+                            formControlName="type"
+                            id="customFiled-{{i}}-type"
+                          >
+                            <option></option>
+                            <option value="number">Число</option>
+                            <option value="text">Текст</option>
+                            <option value="price">Цена</option>
+                            <option value="boolean">Да/Нет</option>
+                            <option value="link">Ссылка</option>
+                            <option value="fractional">Дробное число</option>
+                          </select>
+                        </div>
+
+                        <div class="col-sm-5">
+                          <ng-template [ngIf]="field.get('type')?.value === 'text'
+                          || field.get('type')?.value === 'link' ">
+                            <input
+                              formControlName="value"
+                              class="form-control text-end"
+                              [class.border-danger]="field.get('value')?.invalid"
+                              placeholder=""
+                              type="text"
+                              id="customFiled-{{i}}-value"
+                            >
+                          </ng-template>
+                          <ng-template [ngIf]="field.get('type')?.value === 'price'
+                          || field.get('type')?.value === 'number'
+                          || field.get('type')?.value === 'fractional'">
+                            <input
+                              formControlName="value"
+                              class="form-control text-end"
+                              [class.border-danger]="field.get('value')?.invalid"
+                              placeholder=""
+                              type="number"
+                              id="customFiled-{{i}}-value"
+                            >
+                          </ng-template>
+                          <ng-template [ngIf]="field.get('type')?.value === 'boolean' ">
+                            <select
+                              formControlName="value"
+                              class="form-control text-end"
+                              type="number"
+                              id="customFiled-{{i}}-value"
+                            >
+                              <option default value="Да">Да</option>
+                              <option value="Нет">Нет</option>
+                            </select>
+                          </ng-template>
+                        </div>
+
+                        <div class="col-sm-1">
+                          <a title="удалить поле" (click)="removeCustomField(i)" *ngIf="grantedEdit"><i class="ft-trash-2"></i></a>
+                        </div>
+
+                      </div>
+
+                      <button (click)="addCustomField()" class="btn btn-sm btn-light" *ngIf="grantedEdit">+ добавить поле</button>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-6">
+                  <h5>Штрих-коды</h5>
+                  <ng-container *ngIf="product && product.barcodes">
+                    <div formArrayName="barcodes">
+                      <ng-container *ngFor="let barcode of barcodes.controls; let i=index">
+                        <div class="mb-3 row" [formGroupName]="i">
+                          <label class="col-sm-1 col-form-label " for="barcode-{{i}}">{{i}}</label>
+                          <div class="col-sm-2 me-0 pe-0">
+                            <select class="form-control" formControlName="marketplace">
+                              <option value="0"> -</option>
+                              <option value="{{marketplace.id}}" *ngFor="let marketplace of marketplaces">{{marketplace.name}}</option>
+                            </select>
+                          </div>
+                          <div class="col-sm-2 me-0 pe-0">
+                            <select class="form-control" formControlName="type">
+                              <option value="EAN13">EAN13</option>
+                              <option value="EAN8">EAN8</option>
+                              <option value="Code128">Code128</option>
+                              <option value="GTIN">GTIN</option>
+                              <option value="UPC">UPC</option>
+                            </select>
+                          </div>
+                          <div class="col-sm-5">
+                            <input
+                              formControlName="code"
+                              class="form-control"
+                              placeholder=""
+                              type="text"
+                              id="barcode-{{i}}"
+                            >
+                            <div
+                              *ngIf="barcode.get('code')?.invalid && (barcode.get('code')?.dirty || barcode.get('code')?.touched)"
+                              class="help-block mt-0 ms-1 text-danger"
+                            >
+                              <span *ngIf="barcode.get('code')?.errors?.['required']"> укажите код</span>
+                              <span *ngIf="barcode.get('code')?.errors?.['minlength']"> код слишком короткий</span>
+                            </div>
+                          </div>
+                          <div class="col-sm-1">
+                            <a title="удалить штрихкод" (click)="removeBarcode(i)" *ngIf="grantedEdit"><i class="ft-trash-2"></i></a>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+
+                  <button (click)="addBarcode()" class="btn btn-sm btn-light" *ngIf="grantedEdit">+ добавить штрих-код
+                  </button>
+                </div>
+
+                <div class="col-6">
+                  <h5>Изображения</h5>
+
+                  <label class="image-upload-container btn btn-bwm" *ngIf="grantedEdit">
+                    <input
+                      #imageInput
+                      type="file"
+                      accept="image/*"
+                      (change)="processFile(imageInput)"
+                      class="form-control"
+                    >
+                  </label>
+                  <div class="d-flex">
+                    <div *ngFor="let image of product?.images; let i = index" class="m-2">
+                      <button
+                        *ngIf="grantedEdit"
+                        type="button"
+                        class="btn-close position-absolute"
+                        aria-label="Удалить"
+                        (click)="removeImage(i)"
+                      ></button>
+                      <img
+                        src="{{ window.location.protocol + '//' + window.location.hostname + '/' + image.file }}"
+                        alt="{{image.isDefault ? 'основное изображение' : ''}}"
+                        width="100"
+                        class="border-danger"
+                        [class.border-3]="image.isDefault"
+                        (click)="setDefaultImage(i)"
+                      >
+                    </div>
+                  </div>
+
+                  <h5 class="mt-4">Описание</h5>
+                  <button
+                    *ngIf="grantedEdit"
+                    (click)="editDescription()"
+                    class="btn btn-light"
+                  >редактировать описание
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <h5>Модификации</h5>
+
+                <table *ngIf="this.product && this.product.productModifications" class="table table-bordered">
+                  <tr *ngIf="this.product.productModifications[0]">
+                    <th *ngFor="let value of this.product.productModifications[0].productModificationValues">{{value.attribute.name}}</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                  <tr *ngFor="let modification of this.product.productModifications;">
+                    <td *ngFor="let value of modification.productModificationValues">{{value.value}}</td>
+                    <td><a title="удалить модификацию" (click)="removeBarcode(modification.id)" *ngIf="grantedEdit"><i class="ft-trash-2"></i></a></td>
+                  </tr>
+                </table>
+
+                <button
+                  (click)="addModifications()"
+                  class="btn btn-sm btn-light"
+                  *ngIf="grantedEdit"
+                >создать модификации</button>
+              </div>
+
+
+              <div *ngIf="product?.isSet">
+                <table class="table table-hover">
+                  <thead>
+                  <th>Товар</th>
+                  <th>Артикул</th>
+                  <th>Код</th>
+                  <th>Цена</th>
+                  <th>Количество</th>
+                  <th></th>
+                  </thead>
+                  <tbody formArrayName="productSetItems">
+                  <tr *ngFor="let item of productSetItems.controls; let i=index;">
+                    <td>
+                      {{item.name}}
+                    </td>
+                    <td>
+                      {{item.sku}}
+                    </td>
+                    <td>
+                      {{item.code}}
+                    </td>
+                    <td>
+                      {{item.price}}
+                    </td>
+                    <td>
+                      <input type="text" [formControlName]="i" class="text-end"
+                             [ngClass]="{'bg-danger': item.invalid }">
+                      <div
+                        *ngIf="item.invalid"
+                        class="help-block mt-0 ms-1 text-danger"
+                      >
+                        <span *ngIf="item.errors?.['required']"> укажите количество</span>
+                        <span *ngIf="item.errors?.['min']"> не менее 1</span>
+                      </div>
+                    </td>
+                    <td><a *ngIf="grantedEdit" title="удалить из набора" (click)="removeFromSet(i)"><i
+                      class="ft-trash-2"></i></a></td>
+                  </tr>
+                  </tbody>
+                </table>
+
+                <div class="mb-3 row" *ngIf="grantedEdit">
+                  <label for="typeahead-http" class="col-xs-3 col-sm-auto col-form-label">Добавить товар в
+                    набор:</label>
+                  <div class="col">
+                    <input
+                      id="typeahead-http"
+                      type="text"
+                      class="form-control"
+                      [class.is-invalid]="searchFailed"
+                      [(ngModel)]="searchProductText"
+                      [resultFormatter]="modelFormat"
+                      [inputFormatter]="modelFormat"
+                      [ngbTypeahead]="searchProduct"
+                      (selectItem)="selectItem($event)"
+                      [ngModelOptions]="{standalone: true}"
+                      placeholder="начните вводить название"
+                    />
+                    <small *ngIf="searching" class="form-text text-muted">ищем...</small>
+                    <div class="invalid-feedback" *ngIf="searchFailed">Товаров не найдено</div>
+                  </div>
+                  <div class="col-2">
+                    <button (click)="addInSet()" class="btn btn-primary">Добавить</button>
+                    <button (click)="openCatalog()" class="btn btn-primary">Каталог</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-1 mt-5 text-end">
+                <button type="button" class="btn btn-secondary" (click)="toList()">Закрыть</button>
+                <button type="button" class="btn btn-primary ms-3" (click)="save()"
+                        [disabled]="productForm.invalid || formSubmitted" *ngIf="grantedEdit">Сохранить
+                </button>
+              </div>
+              <div class="mb-3" *ngIf="product?.id">
+                <a class="text-danger" (click)="delete()" *ngIf="grantedDelete">Удалить товар</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<ng-template #catalogModal let-catalogModal>
+  <div class="modal-header">
+    <h4 class="modal-title">Каталог товаров</h4>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <input type="text" placeholder="Вводите параметр товара" class="form-control">
+    </div>
+    <div class="mb-3">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+          <th>Артикул</th>
+          <th>Код</th>
+          <th>Наименование</th>
+          <th>Остаток</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of productsCopy" role="button" (click)="addInSetFromCatalog(product)">
+          <td><span class="me-3">{{ product.sku }}</span></td>
+          <td><span class="me-3">{{ product.code }}</span></td>
+          <td><span class="me-3">{{ product.name }}</span></td>
+          <td *ngIf="product.count"><span class="me-3">{{ product.count }}</span></td>
+          <td *ngIf="!product.count"><span class="me-3 text-danger">0</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="catalogModal.dismiss()">Закрыть</button>
+  </div>
+</ng-template>
+
+<ng-template #descriptionModal let-descriptionModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-description-title">Редактировать описание</h4>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="descriptionForm" *ngIf="descriptionForm">
+      <textarea
+        id="product-description"
+        formControlName="description"
+      ></textarea>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="descriptionModal.dismiss()">Отмена</button>
+    <button type="button" class="btn btn-primary" (click)="saveDescription()">Сохранить</button>
+  </div>
+</ng-template>
+
+
+<ng-template #confirmModal let-confirmModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Удаление организации</h4>
+  </div>
+  <div class="modal-body">
+    <p>Удалить организацию <span class="text-bold-700">"{{ product?.name }}"</span> ?</p>
+    <p>Организация удалится только если нигде не используется
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="confirmModal.dismiss()">Отмена</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete()">Удалить</button>
+  </div>
+</ng-template>
+
+<ng-template #modificationsModal let-modificationsModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-modification-title">Создание модификаций</h4>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="modificationsForm" *ngIf="grantedView && modificationsForm">
+      <p>
+        Укажите характеристику товара, например цвет или размер:
+      </p>
+
+      <div formArrayName="modifications">
+        <div *ngFor="let item of modifications.controls; let i=index;" class="mb-4" [formArrayName]="i">
+          <select formControlName="name" class="form-control">
+            <option *ngFor="let attribute of modificationAttributes" value="{{ attribute.id }}">{{ attribute.name }}</option>
+          </select>
+          <div class="ps-5">
+            <p class="mt-1 mb-1 fs-6">Укажите значения характеристик в отдельных полях:</p>
+            <div class="row" formArrayName="values" *ngFor="let val of modificationValues(i).controls; let k=index">
+              <div class="col-10">
+                <input (keyup)="addModificationValue(i, k, $event)" [formControlName]="k" class="form-control me-3">
+              </div>
+              <div class="col-2">
+                <a title="удалить" (click)="removeModificationValue(i, k)"><i class="ft-trash-2"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-3">
+        <button
+          (click)="addModification()"
+          class="btn btn-sm btn-light"
+          *ngIf="grantedEdit"
+        >+ Характеристика</button>
+      </div>
+    </form>
+    <p class="mt-3 mb-1">Будет создано модификаций: {{modificationsCount}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modificationsModal.dismiss()">Отмена</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="createModifications()"
+      [disabled]="modificationsSubmitted || modificationsCount < 1"
+    >Создать</button>
+  </div>
+</ng-template>

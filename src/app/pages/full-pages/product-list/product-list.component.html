@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-12">
+    <div class="content-header">Товары</div>
+  </div>
+</div>
+
+<p class="text-end">
+  <a class="btn btn-primary me-3" routerLink="/products/new" *ngIf="grantedEdit">Добавить товар</a>
+  <a class="btn btn-primary" routerLink="/products/newSet" *ngIf="grantedEdit">Добавить набор</a>
+</p>
+
+<div class="row">
+  <div class="col-3">
+    <app-product-tree [recursiveList]="productGroups" [level]="0" *ngIf="grantedView" [isSortProduct]="true"  ></app-product-tree>
+  </div>
+  <div class="col-9">
+    <table class="table table-bordered table-striped table-hover" *ngIf="grantedView">
+      <thead>
+      <tr>
+        <th>Артикул</th>
+        <th>Код</th>
+        <th>Наименование</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let product of productsCopy">
+        <td><a routerLink="/products/{{product.id}}" class="me-3">{{ product.sku }}</a></td>
+        <td><a routerLink="/products/{{product.id}}" class="me-3">{{ product.code }}</a></td>
+        <td><a routerLink="/products/{{product.id}}" class="me-3">{{ product.name }}</a></td>
+        <td class="text-end">
+          <a routerLink="/products/{{product.id}}" class="me-3" title="редактировать" *ngIf="grantedEdit"><i class="ft-edit"></i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

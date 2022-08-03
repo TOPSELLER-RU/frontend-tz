@@ -1,0 +1,115 @@
+.customizer {
+
+  .color-options {
+    a {
+      white-space: pre;
+    }
+  }
+
+  .cz-bg-color {
+    margin: 0 auto;
+
+    [class*="gradient-"] {
+      transform: rotate(90deg);
+    }
+
+    &>.row {
+      padding-left: 4px;
+    }
+  }
+
+  .cz-bg-color,
+  .cz-tl-bg-color {
+    .selected {
+      box-shadow: 0 0 1px 1px $primary;
+      border: 3px solid $white;
+    }
+    span {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cz-bg-image {
+    padding-left: 5px;
+    padding-right: 3px;
+
+    img.rounded {
+      height: 80px;
+      width: 40px;
+
+      &.selected {
+        border: 3px solid $white;
+        box-shadow: 0 0 1px 1px $primary;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .togglebutton {
+    .checkbox {
+      margin-right: -8px;
+    }
+  }
+
+  .tl-color-option,
+  .cz-tl-bg-color,
+  .tl-bg-img {
+    display: none;
+  }
+
+  .cz-tl-bg-image {
+    padding-right: 5px;
+
+    .ct-glass-bg {
+      height: 100px;
+      width: 70px;
+
+      &.selected {
+        border: 3px solid $dl-bg-color;
+        box-shadow: 0 0 1px 1px $primary;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cz-tl-bg-color {
+    [class*=bg-]{
+      background-size: cover;
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background .3s;
+    }
+
+    .bg-glass-hibiscus {
+      background-image: $bg-glass-hibiscus;
+    }
+
+    .bg-glass-purple-pizzazz {
+      background-image: $bg-glass-purple-pizzazz;
+    }
+
+    .bg-glass-blue-lagoon {
+      background-image: $bg-glass-blue-lagoon;
+    }
+
+    .bg-glass-electric-violet {
+      background-image: $bg-glass-electric-violet;
+    }
+
+    .bg-glass-portage {
+      background-image: $bg-glass-portage;
+    }
+
+
+    .bg-glass-tundora {
+      background-image: $bg-glass-tundora;
+    }
+  }
+}

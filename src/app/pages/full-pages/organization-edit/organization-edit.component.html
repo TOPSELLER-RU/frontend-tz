@@ -1,0 +1,244 @@
+<div class="row">
+  <div class="col-12">
+    <div class="content-header">{{ organization?.id ? 'Редактирование' : 'Добавление'}} организации</div>
+  </div>
+</div>
+
+<div class="row" *ngIf="grantedView">
+  <div class="col-12">
+    <!-- Kick start -->
+    <div id="kick-start" class="card">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="card-text" *ngIf="organizationForm">
+
+            <form [formGroup]="organizationForm">
+
+              <div class="mb-3">
+                <label class="form-label" for="name">Название:</label>
+                <input
+                  [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched)}"
+                  class="form-control"
+                  formControlName="name"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="name"
+                >
+                <div
+                  *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="name?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+              <div class="mb-3">
+                <label class="form-label" for="fullName">Полное наименование:</label>
+                <input
+                  [ngClass]="{'is-invalid': fullName?.invalid && (fullName?.dirty || fullName?.touched)}"
+                  class="form-control"
+                  formControlName="fullName"
+                  placeholder=""
+                  type="text"
+                  id="fullName"
+                >
+                <div
+                  *ngIf="fullName?.invalid && (fullName?.dirty || fullName?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="fullName?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+              <div class="mb-3">
+                <label class="form-label" for="phone">Телефон:</label>
+                <input
+                  [ngClass]="{'is-invalid': phone?.invalid && (phone?.dirty || phone?.touched)}"
+                  class="form-control"
+                  formControlName="phone"
+                  placeholder=""
+                  type="text"
+                  id="phone"
+                >
+                <div
+                  *ngIf="phone?.invalid && (phone?.dirty || phone?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="phone?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+
+              <div class="mb-3">
+                <label class="form-label" for="email">Email:</label>
+                <input
+                  [ngClass]="{'is-invalid': email?.invalid && (email?.dirty || email?.touched)}"
+                  class="form-control"
+                  formControlName="email"
+                  placeholder=""
+                  type="text"
+                  id="email"
+                >
+                <div
+                  *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="email?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+
+              <div class="mb-3">
+                <label class="form-label" for="legalAddress">Юридический адрес:</label>
+                <input
+                  [ngClass]="{'is-invalid': legalAddress?.invalid && (legalAddress?.dirty || legalAddress?.touched)}"
+                  class="form-control"
+                  formControlName="legalAddress"
+                  placeholder=""
+                  type="text"
+                  id="legalAddress"
+                >
+                <div
+                  *ngIf="legalAddress?.invalid && (legalAddress?.dirty || legalAddress?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="legalAddress?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="inn">ИНН:</label>
+                <input
+                  [ngClass]="{'is-invalid': inn?.invalid && (inn?.dirty || inn?.touched)}"
+                  class="form-control"
+                  formControlName="inn"
+                  placeholder=""
+                  type="text"
+                  id="inn"
+                >
+                <div
+                  *ngIf="inn?.invalid && (inn?.dirty || inn?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="inn?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+
+              <div class="mb-3">
+                <label class="form-label" for="kpp">КПП:</label>
+                <input
+                  [ngClass]="{'is-invalid': kpp?.invalid && (kpp?.dirty || kpp?.touched)}"
+                  class="form-control"
+                  formControlName="kpp"
+                  placeholder=""
+                  type="text"
+                  id="kpp"
+                >
+                <div
+                  *ngIf="kpp?.invalid && (kpp?.dirty || kpp?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="kpp?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+
+              <div class="mb-3">
+                <label class="form-label" for="ogrn">ОГРН:</label>
+                <input
+                  [ngClass]="{'is-invalid': ogrn?.invalid && (ogrn?.dirty || ogrn?.touched)}"
+                  class="form-control"
+                  formControlName="ogrn"
+                  placeholder=""
+                  type="text"
+                  id="ogrn"
+                >
+                <div
+                  *ngIf="ogrn?.invalid && (ogrn?.dirty || ogrn?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="ogrn?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+
+              <div class="mb-3">
+                <label class="form-label" for="okpo">ОКПО:</label>
+                <input
+                  [ngClass]="{'is-invalid': okpo?.invalid && (okpo?.dirty || okpo?.touched)}"
+                  class="form-control"
+                  formControlName="okpo"
+                  placeholder=""
+                  type="text"
+                  id="okpo"
+                >
+                <div
+                  *ngIf="okpo?.invalid && (okpo?.dirty || okpo?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="okpo?.errors?.['required']"> введите название</span>
+                </div>
+              </div>
+
+
+
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  formControlName="isDefault"
+                  type="checkbox"
+                  id="isDefault"
+                  value=""
+                >
+                <label class="form-label" for="isDefault">основная организация</label>
+              </div>
+
+              <div class="mb-1 text-end">
+                <button type="button" class="btn btn-secondary" (click)="toList()">Закрыть</button>
+                <button
+                  *ngIf="grantedEdit"
+                  type="button"
+                  class="btn btn-primary ms-3"
+                  (click)="save()"
+                  [disabled]="organizationForm.invalid || formSubmitted"
+                >Сохранить</button>
+              </div>
+              <div class="mb-3" *ngIf="organization?.id">
+                <a class="text-danger" (click)="delete()" *ngIf="grantedDelete">Удалить организацию</a>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+<ng-template #confirmModal let-confirmModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Удаление организации</h4>
+  </div>
+  <div class="modal-body">
+    <p>Удалить организацию <span class="text-bold-700">"{{ organization?.name }}"</span> ?</p>
+    <p>Организация удалится только если нигде не используется
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="confirmModal.dismiss()">Отмена</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete()">Удалить</button>
+  </div>
+</ng-template>

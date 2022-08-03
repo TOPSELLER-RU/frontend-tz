@@ -1,0 +1,163 @@
+<div class="row">
+  <div class="col-12">
+    <div class="content-header">{{ account?.id ? 'Редактирование' : 'Добавление'}} расчётного счёта</div>
+    <p class="content-sub-header mb-1">Организация: {{organization?.name}}</p>
+  </div>
+</div>
+
+<div class="row" *ngIf="grantedView">
+  <div class="col-12">
+    <div id="kick-start" class="card" *ngIf="accountForm">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="card-text">
+
+            <form [formGroup]="accountForm">
+
+              <div class="mb-3">
+                <label class="form-label" for="bankName">Название банка:</label>
+                <input
+                  [ngClass]="{'is-invalid': bankName?.invalid && (bankName?.dirty || bankName?.touched)}"
+                  class="form-control"
+                  formControlName="bankName"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="bankName"
+                >
+                <div
+                  *ngIf="bankName?.invalid && (bankName?.dirty || bankName?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="bankName?.errors?.['required']"> заполните поле</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="bik">БИК:</label>
+                <input
+                  [ngClass]="{'is-invalid': bik?.invalid && (bik?.dirty || bik?.touched)}"
+                  class="form-control"
+                  formControlName="bik"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="bik"
+                >
+                <div
+                  *ngIf="bik?.invalid && (bik?.dirty || bik?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="bik?.errors?.['required']"> заполните поле</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="bankAddress">Адрес банка:</label>
+                <input
+                  [ngClass]="{'is-invalid': bankAddress?.invalid && (bankAddress?.dirty || bankAddress?.touched)}"
+                  class="form-control"
+                  formControlName="bankAddress"
+                  placeholder=""
+                  type="text"
+                  id="bankAddress"
+                >
+                <div
+                  *ngIf="bankAddress?.invalid && (bankAddress?.dirty || bankAddress?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="bankAddress?.errors?.['required']"> заполните поле</span>
+                </div>
+              </div>
+
+
+              <div class="mb-3">
+                <label class="form-label" for="correspondentAccount">Корреспондентский счет:</label>
+                <input
+                  [ngClass]="{'is-invalid': correspondentAccount?.invalid && (correspondentAccount?.dirty || correspondentAccount?.touched)}"
+                  class="form-control"
+                  formControlName="correspondentAccount"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="correspondentAccount"
+                >
+                <div
+                  *ngIf="correspondentAccount?.invalid && (correspondentAccount?.dirty || correspondentAccount?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="correspondentAccount?.errors?.['required']"> заполните поле</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="settlementAccount">Расчётный счет:</label>
+                <input
+                  [ngClass]="{'is-invalid': settlementAccount?.invalid && (settlementAccount?.dirty || settlementAccount?.touched)}"
+                  class="form-control"
+                  formControlName="settlementAccount"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="settlementAccount"
+                >
+                <div
+                  *ngIf="settlementAccount?.invalid && (settlementAccount?.dirty || settlementAccount?.touched)"
+                  class="help-block mt-0 ms-1 text-danger"
+                >
+                  <span *ngIf="settlementAccount?.errors?.['required']"> заполните поле</span>
+                </div>
+              </div>
+
+
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  formControlName="isDefault"
+                  type="checkbox"
+                  id="isDefault"
+                  value=""
+                >
+                <label class="form-label" for="isDefault">основной расчетный счёт</label>
+              </div>
+
+              <div class="mb-1 text-end">
+                <button type="button" class="btn btn-secondary" (click)="toList()">Закрыть</button>
+                <button
+                  *ngIf="grantedEdit"
+                  type="button"
+                  class="btn btn-primary ms-3"
+                  (click)="save()"
+                  [disabled]="accountForm.invalid || formSubmitted"
+                >Сохранить</button>
+              </div>
+              <div class="mb-3" *ngIf="account?.id">
+                <a class="text-danger" (click)="delete()" *ngIf="grantedDelete">Удалить расчетный счёт</a>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+<ng-template #confirmModal let-confirmModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Удаление организации</h4>
+  </div>
+  <div class="modal-body">
+    <p>Удалить организацию <span class="text-bold-700">"{{ organization?.name }}"</span> ?</p>
+    <p>Организация удалится только если нигде не используется
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="confirmModal.dismiss()">Отмена</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete()">Удалить</button>
+  </div>
+</ng-template>

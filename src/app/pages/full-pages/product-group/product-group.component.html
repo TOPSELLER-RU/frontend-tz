@@ -1,0 +1,68 @@
+<h2>Группы товаров</h2>
+
+<p class="text-end"><a class="btn btn-primary" (click)="add()" *ngIf="grantedEdit">Добавить</a></p>
+
+<app-product-tree [recursiveList]="productGroups" [isAdd]="isAdd" [level]="0" 
+*ngIf="grantedView" [grantedDelete]="grantedDelete" [grantedEdit]="grantedEdit"></app-product-tree>
+
+<ng-template #productGroupModal let-productGroupModal >
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ editProductGroup?.id ? 'Редактировать' : 'Добавить'}} группу товаров</h4>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="productGroupForm">
+
+      <div class="mb-3">
+        <label class="form-label" for="productGroupName">Название:</label>
+        <input
+          [ngClass]="{'is-invalid': productGroupName?.invalid && (productGroupName?.dirty || productGroupName?.touched)}"
+          class="form-control"
+          formControlName="productGroupName"
+          placeholder=""
+          required
+          type="text"
+          id="productGroupName"
+        >
+        <p class="mt-3">Родительская группа : </p>
+        <button  [ngClass]="currentParent?.name === 'Выберете родительскую группу товара!' ? 'btn-danger' : 'btn-secondary' "
+         class="btn" (click)="parentModal()" >{{ currentParent?.name }}</button>
+        <div
+          *ngIf="productGroupName?.invalid && (productGroupName?.dirty || productGroupName?.touched)"
+          class="help-block mt-0 ms-1 text-danger"
+        >
+          <span *ngIf="productGroupName?.errors?.['required']"> введите название</span>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (mousedown)="productGroupModal.dismiss()" >Отмена</button>
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="productGroupForm.invalid || formSubmitted">Сохранить</button>
+  </div>
+</ng-template>
+
+<ng-template #editParent let-editParent>
+  <div class="modal-header">
+    <h4 class="modal-title">Выберете родительскую группу</h4>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <app-product-tree [recursiveList]="productGroups" [isAdd]="!isAdd" [editParent]="editParent"></app-product-tree>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #confirmModal let-confirmModal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Удаление группы товаров</h4>
+  </div>
+  <div class="modal-body">
+    <p>Вы уверены что хотите удалить группу товаров <span class="text-bold-700">"{{ editProductGroup?.name }}"</span> ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="confirmModal.dismiss()">Отмена</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDelete()">Удалить</button>
+  </div>
+</ng-template>

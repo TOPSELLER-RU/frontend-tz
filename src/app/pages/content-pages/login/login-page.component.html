@@ -1,0 +1,96 @@
+<!--Login Page Starts-->
+<section id="login">
+  <div class="row auth-height full-height-vh m-0">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+      <div class="card overflow-hidden">
+        <div class="card-content">
+          <div class="card-body auth-img">
+            <div class="my-3 mx-2">
+              <img alt="" class="img-fluid" height="230" src="assets/img/header-logo-left.svg" width="300">
+            </div>
+
+            <ngb-alert (close)="isLoginFailed = false" *ngIf="isLoginFailed" class="mb-2" type="light-danger">
+              <p class="mb-0">Ошибка авторизации</p>
+            </ngb-alert>
+
+            <form [formGroup]="loginForm">
+              <div class="mb-3">
+                <input
+                  [ngClass]="{
+                    'is-invalid': username?.invalid && (username?.dirty || username?.touched),
+                    'is-valid': username?.valid && (username?.dirty || username?.touched)
+                  }"
+                  class="form-control"
+                  formControlName="username"
+                  placeholder="логин"
+                  required
+                  type="text"
+                  id="username"
+                >
+                <div
+                  *ngIf="username?.invalid && (username?.dirty || username?.touched)"
+                  class="help-block mt-1 text-danger"
+                >
+                  <i class="ft-alert-circle align-middle"></i>
+                  <span *ngIf="username?.errors?.['required']"> введите логин</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <input
+                  [ngClass]="{
+                    's-invalid': password?.invalid && (password?.dirty || password?.touched),
+                    'is-valid': password?.valid && (password?.dirty || password?.touched)
+                  }"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="пароль"
+                  required
+                  type="password"
+                  id="password"
+                >
+                <div
+                  *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+                  class="help-block mt-1 text-danger"
+                >
+                  <i class="ft-alert-circle align-middle"></i>
+                  <span *ngIf="password?.errors?.['required']"> введите пароль</span>
+                </div>
+              </div>
+
+              <div class="d-sm-flex justify-content-between mb-3">
+                <div class="form-check form-check">
+                  <input
+                    class="form-check-input"
+                    id="temporaryAuth"
+                    type="checkbox"
+                    formControlName="temporaryAuth"
+                  >
+                  <label class="form-check-label" for="temporaryAuth">Чужой компьютер</label>
+                </div>
+
+<!--                    <a href="javascript:;">Forgot Password?</a>-->
+              </div>
+              <div class="d-flex justify-content-between flex-sm-row flex-column">
+                <a class="btn bg-light-primary mb-2 mb-sm-0" href="/register">Регистрация</a>
+                <button
+                  (click)="submit()"
+                  [disabled]="loginForm.invalid || formSubmitted"
+                  class="btn btn-primary"
+                >Войти</button>
+              </div>
+              <ngx-spinner
+                type="ball-fussion"
+                size="medium"
+                bdColor="rgba(0, 0, 0, 0.6)"
+                color = "#fff"
+              ></ngx-spinner>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Login Page Ends-->

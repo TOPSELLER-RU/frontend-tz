@@ -1,0 +1,34 @@
+<div class="container" *ngFor="let list of recursiveList; let i = index">
+  <div class="row">
+    <ng-container *ngIf="!isSortProduct && !isEditGroup">
+      <a class="col-10">
+        <i [ngClass]="selectedGroup === list.id ? 'ft-arrow-down' : 'ft-arrow-right'" (click)="showGroup(list.id, $event)" *ngIf="level > 0 && list.productGroups?.length"></i>
+        {{ list.name }}
+      </a>
+    </ng-container>
+    <ng-container *ngIf="isSortProduct">
+      <a class="col-10" (click)="listProducts(list)" >
+        <i [ngClass]="selectedGroup === list.id ? 'ft-arrow-down' : 'ft-arrow-right'" (click)="showGroup(list.id, $event)" *ngIf="level > 0 && list.productGroups?.length"></i>
+        {{ list.name }}
+      </a>
+    </ng-container>
+    <ng-container *ngIf="isEditGroup">
+      <a class="col-10" (click)="editProductGroup(list)" >
+        <i [ngClass]="selectedGroup === list.id ? 'ft-arrow-down' : 'ft-arrow-right'" (click)="showGroup(list.id, $event)" *ngIf="level > 0 && list.productGroups?.length"></i>
+        {{ list.name }}
+      </a>
+    </ng-container>
+    <ng-container *ngIf="list.name !== 'Товары и услуги' ">
+      <ng-container *ngIf="!isAdd">
+        <a class="col-1 edit" (click)="this.edit(list.id)" *ngIf="grantedEdit" ><i class="ft-edit"></i></a>
+        <a class="col-1" (click)="this.delete(list.id || '')" *ngIf="grantedDelete"><i class="ft-trash text-danger"></i></a>
+      </ng-container>
+      <ng-container *ngIf="isAdd">
+        <a class="col-1" (click)="changeParent(list); editParent.dismiss()" ><i class="ft-plus-square"></i></a>
+      </ng-container>
+    </ng-container>
+  </div>
+  <app-product-tree  [class.d-none]="level > 0 && selectedGroup !== list.id" [level]="level+1"
+    [recursiveList]="list.productGroups" [grantedEdit]="grantedEdit" [grantedDelete]="grantedDelete"
+    [isAdd]="isAdd" [editParent]="editParent" [isSortProduct]="isSortProduct" [isEditGroup]="isEditGroup"></app-product-tree>
+</div>

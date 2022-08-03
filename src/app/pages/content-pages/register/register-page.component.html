@@ -1,0 +1,122 @@
+<!--Login Page Starts-->
+<section id="login">
+  <div class="row auth-height full-height-vh m-0">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+      <div class="card overflow-hidden">
+        <div class="card-content">
+          <div class="card-body auth-img">
+            <div class="my-3 mx-2">
+              <img alt="" class="img-fluid" height="230" src="assets/img/header-logo-left.svg" width="300">
+            </div>
+            <h3>Регистрация</h3>
+
+            <ngb-alert (close)="isLoginFailed = false" *ngIf="registrationsSuccess" class="mb-2" type="light-success">
+              <p class="mb-0 font-medium-3">Вы успешно зарегистрированы!</p>
+              <p class="mb-0">Проверьте ваш почтовый ящик</p>
+            </ngb-alert>
+
+            <ngb-alert (close)="isLoginFailed = false" *ngIf="isLoginFailed" class="mb-2" type="light-danger">
+              <p class="mb-0">Login failed!</p>
+            </ngb-alert>
+
+            <form [formGroup]="registerForm" *ngIf="!registrationsSuccess">
+              <div class="mb-3">
+                <label class="form-label" for="firstname">Ваше имя:</label>
+                <input
+                  [ngClass]="{
+                    's-invalid': firstname?.invalid && (firstname?.dirty || firstname?.touched),
+                    'is-valid': firstname?.valid && (firstname?.dirty || firstname?.touched)
+                  }"
+                  class="form-control"
+                  formControlName="firstname"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="firstname"
+                >
+                <div
+                  *ngIf="firstname?.invalid && (firstname?.dirty || firstname?.touched)"
+                  class="help-block mt-1 text-danger"
+                >
+                  <i class="ft-alert-circle align-middle"></i>
+                  <span *ngIf="firstname?.errors?.['required']"> введите имя</span>
+                  <span *ngIf="firstname?.errors?.['minlength']"> имя слишком короткое</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="email">Электронная почта:</label>
+                <input
+                  [ngClass]="{
+                    's-invalid': email?.invalid && (email?.dirty || email?.touched),
+                    'is-valid': email?.valid && (email?.dirty || email?.touched)
+                  }"
+                  class="form-control"
+                  formControlName="email"
+                  placeholder=""
+                  required
+                  type="text"
+                  id="email"
+                >
+                <div
+                  *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+                  class="help-block mt-1 text-danger"
+                >
+                  <i class="ft-alert-circle align-middle"></i>
+                  <span *ngIf="email?.errors?.['required']"> введите электронную почту</span>
+                  <span *ngIf="email?.errors?.['email']"> некорректное значение</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="phone">Телефон:</label>
+                <input
+                  type="text"
+                  [ngClass]="{
+                    's-invalid': phone?.invalid && (phone?.dirty || phone?.touched),
+                    'is-valid': phone?.valid && (phone?.dirty || phone?.touched)
+                  }"
+                  class="form-control"
+                  formControlName="phone"
+                  placeholder="+7 900 000 00 00"
+                  required
+
+                  id="phone"
+                  prefix="+7"
+                  mask="(000) 000 00 00"
+                />
+                <div
+                  *ngIf="phone?.invalid && (phone?.dirty || phone?.touched)"
+                  class="help-block mt-1 text-danger"
+                >
+                  <i class="ft-alert-circle align-middle"></i>
+                  <span *ngIf="phone?.errors?.['required']"> введите телефон</span>
+                  <span *ngIf="phone?.errors?.['mask']"> некорректное значение</span>
+                </div>
+              </div>
+
+              <p class="font-small-2">Нажимая кнопку "Стать клиентом", вы соглашаетесь
+                <br>с <a href="/page">условиями оферты</a>
+              </p>
+
+              <div class="d-flex justify-content-between flex-sm-row flex-column py-3">
+                <button
+                  (click)="submit()"
+                  [disabled]="registerForm.invalid || formSubmitted"
+                  class="btn btn-primary"
+                >Стать клиентом</button>
+              </div>
+              <ngx-spinner
+                type="ball-fussion"
+                size="medium"
+                bdColor="rgba(0, 0, 0, 0.6)"
+                color = "#fff"
+              ></ngx-spinner>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--Login Page Ends-->

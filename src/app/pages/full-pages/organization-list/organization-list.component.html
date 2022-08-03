@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-12">
+    <div class="content-header">Организации</div>
+  </div>
+</div>
+
+<p class="text-end"><a class="btn btn-primary" routerLink="/organizations/new" *ngIf="grantedEdit">Добавить</a></p>
+
+<table class="table table-bordered table-striped table-hover" *ngIf="grantedView">
+  <thead>
+  <tr>
+    <th>Наименование</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let organization of organizations">
+    <td
+      [class.fw-bold]="organization.isDefault"
+    >
+      <a routerLink="/organizations/{{organization.id}}" title="просмотр">{{ organization.name }}</a>
+    </td>
+    <td class="text-end">
+      <a routerLink="/organizations/{{organization.id}}/settlement-accounts" class="me-3" title="расчетные счета" *ngIf="grantedSettlementAccount"><i class="ft-credit-card"></i></a>
+      <a routerLink="/organizations/{{organization.id}}" title="редактировать" *ngIf="grantedEdit"><i class="ft-edit"></i></a>
+    </td>
+  </tr>
+  </tbody>
+</table>
